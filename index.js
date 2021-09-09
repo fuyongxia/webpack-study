@@ -1,9 +1,7 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import angela from   'angela'
 import App from './src/pages/App';
-import 'core-js'
 
 
 // const app=angela()

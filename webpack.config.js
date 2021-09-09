@@ -21,7 +21,7 @@ module.exports = {
     // snapshot:{managedPaths:[]},//剔除覆盖原来的优化，从而支持监听node_modules文件的变化
     devServer: {
         contentBase: './public',//额外静态资源路径，非webpack打包输入的文件资源
-        publicPath: '/',
+        // publicPath: '/dist/',
         proxy,
         hot: true
     },
@@ -29,6 +29,7 @@ module.exports = {
     optimization: {
         runtimeChunk: "single",
         splitChunks: {
+
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]|[\\/]src[\\/]/,
@@ -43,9 +44,9 @@ module.exports = {
     },
     module: {
         rules: [
-            {
+            { 
                 test: /\.jsx?$/,
-                // exclude: /(node_modules)/,
+                exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -53,14 +54,8 @@ module.exports = {
                             [
                                 '@babel/preset-env',
                                 {
-                                    "targets": {
-                                        "ie": "11",
-                                        "edge": "17",
-                                        "firefox": "60",
-                                        "chrome": "67",
-                                        "safari": "11.1"
-                                    },
-                                    "useBuiltIns": "entry",
+                                    "targets": "> 0.25%, not dead",
+                                    "useBuiltIns": "usage",
                                     "corejs": { version: 3 }
                                 }
                             ],
@@ -68,7 +63,51 @@ module.exports = {
                         ]
                     }
                 }
+            },
+
+            {
+                test: /\.css$/i,
+                use: [
+                    'style-loader',
+                    {
+                        loader: "css-loader",
+                        options:{
+                            importLoaders:1//在css-loader工作的过程中，如果遇到.css文件则回退给它的上一个loader进入处理流程（1代表回退一个，2代表回退俩个）
+                        }
+                       
+                    },
+                    'postcss-loader'
+                ]
+            },
+            {
+                test: /\.less$/i,
+                use: [
+                    'style-loader',
+                    {
+                        loader: "css-loader",
+                        options: {
+                            // sourceMap: true,
+                            modules: {
+                                auto:(resourcePath)=>{
+                                    console.log(resourcePath,'resourcePath')
+                                    if(resourcePath.includes('antd.css')){
+                                        return false
+                                    }
+                                    return true
+                                },
+                                localIdentName: "[local]___[hash:base64:5]"
+                            },
+                            importLoaders:1//这个配置的作用为了防止less文件中使用@import引入一个css文件，如果引入的是less文件，则不需要该处理，原因在于less-loader对@import(.css|.less)处理的不同
+                            
+                        }
+                    },
+                    'postcss-loader',
+                    {
+                        loader: "less-loader"
+                    }
+                ]
             }
+
         ]
     },
 
@@ -78,5 +117,6 @@ module.exports = {
         new HtmlWebpackPlugin({ template: './aa.html', filename: 'aa.html', chunks: ['aa'] }),
         new webpack.HotModuleReplacementPlugin()
     ],
+
 
 };

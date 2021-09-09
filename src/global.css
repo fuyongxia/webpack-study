@@ -1,0 +1,7 @@
+@import 'antd/dist/antd.css'; 
+
+.readonly{
+    pointer-events: none;
+    user-select: none;
+}
+

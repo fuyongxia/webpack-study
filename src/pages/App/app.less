@@ -1,0 +1,14 @@
+@import url('./test.css');//经过less编译，没有变化直接输出
+@import url('./test.less');//经过less编译，会变成test.less文件中的内容
+:global{
+    .title{
+        color:red;
+        background-image:url(https://www.baidu.com/img/flexible/logo/pc/result.png);
+        width:200px;
+        height:200px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+   
+    
+}
