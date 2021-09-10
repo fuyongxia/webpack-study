@@ -1,7 +1,15 @@
 @import 'antd/dist/antd.css'; 
 
+@font-face {
+    font-family: popmaru-light;
+    src: url('./Assets/5e005aed1f3fa.ttf');
+}
 .readonly{
     pointer-events: none;
     user-select: none;
+    background-image:url(./Assets/1.png);
+    background-size: contain;
+    background-repeat: no-repeat;
 }
+
 

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import angela from   'angela'
 import App from './src/pages/App';
+import Welcome from './src/pages/Welcome';
 
 
 // const app=angela()
@@ -11,7 +12,7 @@ import App from './src/pages/App';
 window.onerror=(e)=>{
     console.log(e)
 }
-console.log(99999)
+// console.log(99999)
 
 
 ReactDOM.render(

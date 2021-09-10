@@ -29,6 +29,7 @@ export default () => {
         <Button type='primary' style={{color:'red'}} className='readonly'>点击</Button>
         <div className='title'>测试</div>
         <div className='custo' style={{width:100,maxHeight:100}}>测试postcss</div>
+        <div className='readonly' style={{width:100,maxHeight:100}}>测试postcss</div>
         {/* <div className='title'>测试lessMixins</div> */}
 
     </>

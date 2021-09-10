@@ -7,6 +7,7 @@ const webpack = require('webpack')
 
 module.exports = {
     mode: 'development',
+    target:'web',
     entry: {
         index: './index.js',
         aa: './aa.js'
@@ -21,9 +22,10 @@ module.exports = {
     // snapshot:{managedPaths:[]},//剔除覆盖原来的优化，从而支持监听node_modules文件的变化
     devServer: {
         contentBase: './public',//额外静态资源路径，非webpack打包输入的文件资源
-        // publicPath: '/dist/',
+        publicPath: '/',
         proxy,
-        hot: true
+        hot: true,
+        // open:true
     },
     devtool: 'eval-cheap-module-source-map',
     optimization: {
@@ -54,7 +56,7 @@ module.exports = {
                             [
                                 '@babel/preset-env',
                                 {
-                                    "targets": "> 0.25%, not dead",
+                                    "targets": "> 0.01%, not dead",
                                     "useBuiltIns": "usage",
                                     "corejs": { version: 3 }
                                 }
@@ -72,7 +74,8 @@ module.exports = {
                     {
                         loader: "css-loader",
                         options:{
-                            importLoaders:1//在css-loader工作的过程中，如果遇到.css文件则回退给它的上一个loader进入处理流程（1代表回退一个，2代表回退俩个）
+                            importLoaders:1,//在css-loader工作的过程中，如果遇到.css文件则回退给它的上一个loader进入处理流程（1代表回退一个，2代表回退俩个）
+                            esModule: false,
                         }
                        
                     },
@@ -97,6 +100,7 @@ module.exports = {
                                 },
                                 localIdentName: "[local]___[hash:base64:5]"
                             },
+                            esModule: false,
                             importLoaders:1//这个配置的作用为了防止less文件中使用@import引入一个css文件，如果引入的是less文件，则不需要该处理，原因在于less-loader对@import(.css|.less)处理的不同
                             
                         }
@@ -106,8 +110,50 @@ module.exports = {
                         loader: "less-loader"
                     }
                 ]
-            }
+            },
+            // {
+            //     test: /\.(jpg|png)$/i,
+            //     use: [
+            //         {
+            //             loader:'url-loader',
+            //             options:{
+            //                 limit: 20*1024,
+            //                 // esModule: false,
+            //                 name:`static/[name]-[hash:8].[ext]`,
+            //                 // outputPath:'static'
+            //             }
+            //     }
+                          
+            //     ],
+                
+            // },
+            {
+                test: /\.(jpg|png)$/i,
+                type:'asset',
+                parser: {
+                    dataUrlCondition: {
+                      maxSize: 20 * 1024 // 20kb
+                    }
+                  },
+                  generator: {
+                    filename: 'static/[name]-[hash:8][ext]'
+                  }
+                
 
+                                 
+                
+            },
+            {
+                test: /\.(ttc|ttf)$/i,
+                type:'asset/resource',
+                  generator: {
+                    filename: 'static/[name]-[hash:8][ext]'
+                  }
+                
+
+                                 
+                
+            },
         ]
     },
 
